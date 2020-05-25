@@ -39,7 +39,7 @@ function getCommunes(codeDepartement) {
 }
 
 function getMutations(codeCommune, idSection, startDate, endDate) {
-	return getRemoteJSON(`https://app.dvf.etalab.gouv.fr/api/mutations3/${codeCommune}/${idSectionToCode(idSection)}`)
+	return getRemoteJSON(`/api/mutations3/${codeCommune}/${idSectionToCode(idSection)}`)
 		.then(function (data) {
 			return data.mutations.filter(function (m) {
 				return m.date_mutation >= startDate && m.date_mutation <= endDate && m.id_parcelle.startsWith(idSection)
