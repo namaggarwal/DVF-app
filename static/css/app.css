@@ -1,7 +1,8 @@
 html, body {
 	color: #fff;
 	font-size: 14px !important;
-	margin: 0;
+  margin: 0;
+  font-family: 'Nunito', sans-serif;
 }
 
 th {
@@ -214,4 +215,8 @@ h3 {
 .switch-map-style img {
   width: 72px;
   height: 72px;
+}
+
+#exportCSV {
+  background-color: #d5a84f;
 }
