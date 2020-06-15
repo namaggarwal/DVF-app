@@ -6,7 +6,7 @@
 var vue = new Vue({
 	el: '#app',
 	data: {
-		fold_left: false,
+		fold_left: true,
 		section: false,
 		parcelle: null,
 		mutationIndex: null,
