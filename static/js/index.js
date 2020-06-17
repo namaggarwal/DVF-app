@@ -533,7 +533,14 @@ function onCityClicked(event) {
 function onDepartementClick(event) {
 	// L'utilisateur a cliqué sur la géométrie d'un département
 	var sonCode = event.features[0].properties.code
-	entrerDansDepartement(sonCode);
+	entrerDansDepartement(sonCode).then(()=> {
+		const params = new URLSearchParams(window.location.search);
+		let postCode = params.get('postcode');
+		if(!postCode) {
+			return;
+		}
+		onCityClicked({features:[{properties:{code: postCode}}]});
+	});
 	document.getElementById("departements").value = sonCode;
 };
 
@@ -571,8 +578,22 @@ function toggleLeftBar() {
 					})
 					map.addLayer(departementsLayer)
 					map.addLayer(departementsContoursLayer)
-				map.setPaintProperty(departementsContoursLayer.id, 'line-color', vue.mapStyle === 'ortho' ? '#fff' : '#000')
-			})
+				map.setPaintProperty(departementsContoursLayer.id, 'line-color', vue.mapStyle === 'ortho' ? '#fff' : '#000');
+
+			}).then(() => {
+				const params = new URLSearchParams(window.location.search);
+				let postCode = params.get('postcode');
+				if(!postCode) {
+					return;
+				}
+				if(postCode[0] == '9' && postCode[1] == '7') {
+					postCode = postCode.substring(0,3);
+				}else{
+					postCode = postCode.substring(0,2);
+				}
+				console.log(postCode);
+				onDepartementClick({features:[{properties:{code: postCode}}]});
+			});
 				}
 		})
 	map.on('styledata', loadCustomLayers)
