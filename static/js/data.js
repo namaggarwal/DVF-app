@@ -1,3 +1,4 @@
+const postCodeMap = {};
 function getRemoteJSON(url, throwIfNotFound) {
 	return fetch(url).then(function (response) {
 		if (response.ok) {
@@ -16,8 +17,26 @@ function sortByNom(features) {
 	return features.sort(function(a,b){return a.properties.nom.localeCompare(b.properties.nom);})
 }
 
+function postCodeToCodeMapping(codeDepartment, communes) {
+	if(!communes || !Array.isArray(communes.features)) {
+		return;
+	}
+
+	communes.features.forEach(feature => {
+		if(!feature.properties || !Array.isArray(feature.properties.codesPostaux)) {
+			return;
+		}
+		feature.properties.codesPostaux.forEach(postCode => {
+			postCodeMap[postCode] = feature.properties.code;
+		});
+	});
+
+}
+
 function getCommunes(codeDepartement) {
 	return getRemoteJSON(`https://geo.api.gouv.fr/departements/${codeDepartement}/communes?geometry=contour&format=geojson&type=commune-actuelle`).then(function (communes) {
+
+		postCodeToCodeMapping(codeDepartement, communes);
 
 		// Pour Paris, Lyon, Marseille, il faut compléter avec les arrondissements
 		if (['75', '69', '13'].includes(codeDepartement)) {

@@ -536,10 +536,10 @@ function onDepartementClick(event) {
 	entrerDansDepartement(sonCode).then(()=> {
 		const params = new URLSearchParams(window.location.search);
 		let postCode = params.get('postcode');
-		if(!postCode) {
+		if(!postCode || !postCodeMap[postCode]) {
 			return;
 		}
-		onCityClicked({features:[{properties:{code: postCode}}]});
+		onCityClicked({features:[{properties:{code: postCodeMap[postCode]}}]});
 	});
 	document.getElementById("departements").value = sonCode;
 };
@@ -591,7 +591,6 @@ function toggleLeftBar() {
 				}else{
 					postCode = postCode.substring(0,2);
 				}
-				console.log(postCode);
 				onDepartementClick({features:[{properties:{code: postCode}}]});
 			});
 				}
